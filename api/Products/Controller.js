@@ -58,11 +58,27 @@ const getProductByName = async (req, res) => {
         await connect(process.env.MONGO_URI);
         const products = await Product.findOne({ ProductName });
 
-        res.json({ products });
-    } catch (error) {
-        res.status(400).json({
-            message: error.message
-        });
+        //         res.json({ products });
+        //     } catch (error) {
+        //         res.status(400).json({
+        //             message: error.message
+        //         });
+        //     }
+        // }
+        if (!products) {
+            res.status(404).json({
+                message: "Product not Exists"
+            })
+        }
+        else {
+            res.json({
+                products
+            })
+        }
+    }
+    catch (error) {
+        console.error("Error fetching Product by name:", error);
+        res.status(500).json({ message: "Internal server error" });
     }
 }
 
@@ -117,7 +133,7 @@ const updateProduct = async (req, res) => {
     const { _id, ProductName, description, price, category, colors, brand, thumbnail, imageArray, modelYear, discountPercentage, rating, stock } = req.body
 
     const filter = { _id };
-    const update = { ProductName, description, price, category, colors, brand, thumbnail, imageArray, modelYear, discountPercentage, rating, stock } ;
+    const update = { ProductName, description, price, category, colors, brand, thumbnail, imageArray, modelYear, discountPercentage, rating, stock };
 
     try {
         await connect(process.env.MONGO_URI)

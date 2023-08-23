@@ -44,7 +44,7 @@ const getAllBrands = async (req, res) => {
         await connect(process.env.MONGO_URI)
         const allBrands = await Brand.find()
         res.json({
-            category: allBrands
+            brands: allBrands
         })
     }
     catch (error) {
